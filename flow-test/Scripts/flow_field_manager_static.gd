@@ -4,7 +4,7 @@ extends Node2D
 
 # Grid settings
 # must use pixel perfect ratios or everything will break
-@export var cell_size: float = 32.0  # Pixels per cell, fits 960x540
+@export var cell_size: float = 16.0  # Pixels per cell, fits 960x540
 @warning_ignore("narrowing_conversion")
 @export var grid_width: int = ceili(960 / cell_size) # 960 project size
 @warning_ignore("narrowing_conversion")
