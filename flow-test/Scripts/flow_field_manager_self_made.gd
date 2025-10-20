@@ -27,7 +27,6 @@ var neighbor_queue: Array = []
 
 func _ready():
 	grid = generate_new_grid(target)
-	$"../units/Unit".connect("request_grid", handle_request_grid)
 	if(debug == true):
 		queue_redraw()
 
@@ -38,22 +37,22 @@ func _input(event: InputEvent):
 		
 	if event.is_action_pressed("left_click"):
 		var pos: Vector2 = get_target_grid_position(get_viewport().get_mouse_position())
-		print(grid[pos.x][pos.y].cost)
-		print(grid[pos.x][pos.y].flow_vector)
+		print("cost: ", grid[pos.x][pos.y].cost)
+		print("vector: ", grid[pos.x][pos.y].flow_vector)
 
 func _draw():
 	for x in range(grid_width):
 		for y in range(grid_height):
 			var pos = Vector2(x * cell_size, y * cell_size)
-			#var cost: int = grid[x][y].cost
-			#var fill_color: Color = Color(255, 0, 0, float(cost) / 50)
-			#draw_rect(Rect2(pos, Vector2(cell_size, cell_size)), fill_color, true)
+			var cost: int = grid[x][y].cost
+			var fill_color: Color = Color(255, 0, 0, float(cost) / 50)
+			draw_rect(Rect2(pos, Vector2(cell_size, cell_size)), fill_color, true)
 			draw_rect(Rect2(pos, Vector2(cell_size, cell_size)), Color.BLACK, false, 2.0)
 			if(grid[x][y].flow_vector != Vector2.ZERO):
 				@warning_ignore("integer_division")
 				var center = pos + Vector2(cell_size / 2, cell_size / 2)
 				var line_end = center + grid[x][y].flow_vector * (cell_size * 0.5)
-				draw_line(center, line_end, Color.BLUE, 1.0)
+				draw_line(center, line_end, Color.BLUE, 2.0)
 
 func get_target_grid_position(pos: Vector2):
 	var grid_pos: Vector2 = Vector2.ZERO
