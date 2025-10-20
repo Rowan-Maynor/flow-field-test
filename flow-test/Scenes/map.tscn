@@ -120,6 +120,7 @@ sources/6 = SubResource("TileSetAtlasSource_macow")
 sources/7 = SubResource("TileSetAtlasSource_ltf6m")
 
 [node name="Test2" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("1_dlo4w")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
@@ -130,6 +131,16 @@ tile_set = SubResource("TileSet_uus22")
 script = ExtResource("9_4c2oa")
 
 [node name="units" type="Node2D" parent="."]
+y_sort_enabled = true
 
 [node name="Unit" parent="units" instance=ExtResource("10_olcgw")]
-position = Vector2(487, 270)
+position = Vector2(612, 448)
+
+[node name="Unit2" parent="units" instance=ExtResource("10_olcgw")]
+position = Vector2(282, 488)
+
+[node name="Unit3" parent="units" instance=ExtResource("10_olcgw")]
+position = Vector2(257, 96)
+
+[node name="Unit4" parent="units" instance=ExtResource("10_olcgw")]
+position = Vector2(555, 205)

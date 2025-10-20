@@ -3,7 +3,7 @@ extends Node2D
 @onready var flow_field_manager: Node2D = $flow_field_manager
 @onready var units: Node2D = $units
 
-var cell_size: int = 16 #matches to the size of one tile
+const CELL_SIZE: int = 16 #matches to the size of one tile
 
 func _input(event: InputEvent) -> void:
 	if(event.is_action("right_click")):
@@ -16,6 +16,6 @@ func _input(event: InputEvent) -> void:
 
 func get_target_grid_position(pos: Vector2):
 	var grid_pos: Vector2 = Vector2.ZERO
-	grid_pos.x = (floori(pos.x / cell_size))
-	grid_pos.y = (floori(pos.y / cell_size))
+	grid_pos.x = (floori(pos.x / CELL_SIZE))
+	grid_pos.y = (floori(pos.y / CELL_SIZE))
 	return grid_pos
