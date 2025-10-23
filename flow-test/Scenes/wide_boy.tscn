@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://dytx80exegdxc" path="res://icon.svg" id="1_ro6cu"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8od7v"]
-height = 122.0
+height = 128.0
 
 [node name="Test" type="CharacterBody2D"]
 collision_layer = 2
