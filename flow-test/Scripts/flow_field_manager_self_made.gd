@@ -45,6 +45,8 @@ func _input(event: InputEvent):
 			print("cost: ", grid[pos.x][pos.y].cost)
 			print("vector: ", grid[pos.x][pos.y].flow_vector)
 			print("index: ", grid[pos.x][pos.y].index)
+			print("position: ", grid[pos.x][pos.y].position)
+			print("mouse_position: ", get_viewport().get_mouse_position())
 
 func _draw():
 	if grid.is_empty():
@@ -52,9 +54,9 @@ func _draw():
 	for x in range(grid_width):
 		for y in range(grid_height):
 			var pos = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-			#var cost: int = grid[x][y].cost
-			#var fill_color: Color = Color(255, 0, 0, float(cost) / 50)
-			#draw_rect(Rect2(pos, Vector2(CELL_SIZE, CELL_SIZE)), fill_color, true)
+			var cost: int = grid[x][y].cost
+			var fill_color: Color = Color(255, 0, 0, float(cost)/100)
+			draw_rect(Rect2(pos, Vector2(CELL_SIZE, CELL_SIZE)), fill_color, true)
 			draw_rect(Rect2(pos, Vector2(CELL_SIZE, CELL_SIZE)), Color.BLACK, false, 2.0)
 			if(grid[x][y].flow_vector != Vector2.ZERO):
 				@warning_ignore("integer_division")
@@ -78,7 +80,7 @@ func generate_new_grid(new_target: Vector2):
 				"index": Vector2i(x, y),
 				"position": Vector2(x * CELL_SIZE, y * CELL_SIZE),
 				"visited": false,
-				"cost":  0.0,
+				"cost":  255.0,
 				"flow_vector": Vector2.ZERO
 			}
 			column.append(cell)
@@ -86,6 +88,7 @@ func generate_new_grid(new_target: Vector2):
 	
 	cell_queue = []
 	cell_queue.append(new_target)
+	new_grid[new_target.x][new_target.y].cost = 0
 	calculate_costs(new_grid, new_target)
 	return new_grid
 
@@ -105,9 +108,33 @@ func calculate_costs(new_grid: Array, new_target: Vector2):
 			var next_vector: Vector2 = Vector2(next_x, next_y)
 			if(is_valid_cell(next_x, next_y) and not new_grid[next_x][next_y].visited):
 				new_grid[next_x][next_y].visited = true
-				new_grid[next_x][next_y].cost = new_grid[curr_cell.x][curr_cell.y].cost + 1
-				cell_queue.append(next_vector)
+				var cost_total = new_grid[curr_cell.x][curr_cell.y].cost + 1
 				
+				#generate a collision check for walls/units
+				var space_state = get_world_2d().direct_space_state
+				var shape: RectangleShape2D = RectangleShape2D.new()
+				shape.size = Vector2(8, 8)
+				
+				var query: PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
+				query.shape = shape
+				query.transform = Transform2D(0, new_grid[next_x][next_y].position + Vector2(8, 8))
+				query.collision_mask = 1
+				query.collide_with_areas = true
+				query.collide_with_bodies = true
+				
+				#check if wall (layer 1)
+				var results: Array = space_state.intersect_shape(query)
+				if not results.is_empty():
+					cost_total = 255
+					new_grid[next_x][next_y].cost = cost_total
+					continue
+				else:
+					query.collision_mask = 2
+					results = space_state.intersect_shape(query)
+					if not results.is_empty():
+						cost_total += 5
+					new_grid[next_x][next_y].cost = cost_total
+					cell_queue.append(next_vector)
 	
 	calculate_vectors(new_grid, new_target)
 
