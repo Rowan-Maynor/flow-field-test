@@ -118,23 +118,17 @@ func calculate_costs(new_grid: Array, new_target: Vector2):
 				var query: PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
 				query.shape = shape
 				query.transform = Transform2D(0, new_grid[next_x][next_y].position + Vector2(8, 8))
-				query.collision_mask = 1
+				query.collision_mask = 2
 				query.collide_with_areas = true
 				query.collide_with_bodies = true
 				
-				#check if wall (layer 1)
+				#check if units blocking (layer 2)
 				var results: Array = space_state.intersect_shape(query)
 				if not results.is_empty():
-					cost_total = 255
-					new_grid[next_x][next_y].cost = cost_total
-					continue
-				else:
-					query.collision_mask = 2
-					results = space_state.intersect_shape(query)
-					if not results.is_empty():
-						cost_total += 5
-					new_grid[next_x][next_y].cost = cost_total
-					cell_queue.append(next_vector)
+					cost_total += 5
+					
+				new_grid[next_x][next_y].cost = cost_total
+				cell_queue.append(next_vector)
 	
 	calculate_vectors(new_grid, new_target)
 
