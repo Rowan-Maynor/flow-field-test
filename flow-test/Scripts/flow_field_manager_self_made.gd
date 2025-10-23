@@ -80,7 +80,7 @@ func generate_new_grid(new_target: Vector2):
 				"index": Vector2i(x, y),
 				"position": Vector2(x * CELL_SIZE, y * CELL_SIZE),
 				"visited": false,
-				"cost":  255.0,
+				"cost":  0.0,
 				"flow_vector": Vector2.ZERO
 			}
 			column.append(cell)
