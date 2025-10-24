@@ -125,7 +125,7 @@ func calculate_costs(new_grid: Array, new_target: Vector2):
 				#check if units blocking (layer 2)
 				var results: Array = space_state.intersect_shape(query)
 				if not results.is_empty():
-					cost_total += 5
+					cost_total += 50
 					
 				new_grid[next_x][next_y].cost = cost_total
 				cell_queue.append(next_vector)
