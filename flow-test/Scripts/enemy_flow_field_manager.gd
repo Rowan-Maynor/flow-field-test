@@ -3,14 +3,12 @@ extends Node2D
 var debug: bool = true
 
 const CELL_SIZE: int = 16
-@warning_ignore("integer_division")
-var grid_width: int = floori(960 / CELL_SIZE) #this will be 60 when finalized for 16x16
-@warning_ignore("integer_division")
-var grid_height: int = floori(540 / CELL_SIZE) #this will be 33 when finalized for 16x16
+var grid_width: int = floori(60) #this will be 60 when finalized for 16x16
+var grid_height: int = floori(33) #this will be 33 when finalized for 16x16
 
 var target: Vector2 = Vector2(10, 10)
 
-var grid: Array = [] #this will store data using [x][y]
+var grids: Array = [] #this will store data using [x][y]
 
 #Using this will properly propogate costs in a BFS
 const NEIGHBORS: Array = [
@@ -34,35 +32,6 @@ const NEIGHBORS_FLOW: Array = [
 
 var cell_queue: Array = []
 
-func _input(event: InputEvent):
-	if event.is_action_pressed("right_click"):
-		if(debug == true):
-			queue_redraw()
-		
-	if event.is_action_pressed("left_click"):
-		if(grid):
-			var pos: Vector2 = get_target_grid_position(get_viewport().get_mouse_position())
-			print("cost: ", grid[pos.x][pos.y].cost)
-			print("vector: ", grid[pos.x][pos.y].flow_vector)
-			print("index: ", grid[pos.x][pos.y].index)
-			print("position: ", grid[pos.x][pos.y].position)
-			print("mouse_position: ", get_viewport().get_mouse_position())
-
-func _draw():
-	if grid.is_empty():
-		return
-	for x in range(grid_width):
-		for y in range(grid_height):
-			var pos = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-			var cost: int = grid[x][y].cost
-			var fill_color: Color = Color(255, 0, 0, float(cost)/100)
-			draw_rect(Rect2(pos, Vector2(CELL_SIZE, CELL_SIZE)), fill_color, true)
-			draw_rect(Rect2(pos, Vector2(CELL_SIZE, CELL_SIZE)), Color.BLACK, false, 2.0)
-			if(grid[x][y].flow_vector != Vector2.ZERO):
-				@warning_ignore("integer_division")
-				var center = pos + Vector2(CELL_SIZE / 2, CELL_SIZE / 2)
-				var line_end = center + grid[x][y].flow_vector * (CELL_SIZE * 0.5)
-				draw_line(center, line_end, Color.BLUE, 2.0)
 
 func get_target_grid_position(pos: Vector2):
 	var grid_pos: Vector2 = Vector2.ZERO

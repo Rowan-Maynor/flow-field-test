@@ -1,14 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://cet8crokk0ts5"]
+[gd_scene load_steps=6 format=3 uid="uid://cet8crokk0ts5"]
 
 [ext_resource type="Script" uid="uid://gb3ntnh46kum" path="res://Scripts/main.gd" id="1_hj5t5"]
-[ext_resource type="Script" uid="uid://csw0n7io1r1h8" path="res://Scripts/flow_field_manager_self_made.gd" id="2_xe0gy"]
+[ext_resource type="Script" uid="uid://ih0xfublsu32" path="res://Scripts/enemy_flow_field_manager.gd" id="2_tqsk5"]
+[ext_resource type="Script" uid="uid://csw0n7io1r1h8" path="res://Scripts/player_flow_field_manager.gd" id="2_xe0gy"]
 [ext_resource type="PackedScene" uid="uid://c7h2oqo8j035v" path="res://Scenes/wide_boy.tscn" id="3_hj5t5"]
 [ext_resource type="PackedScene" uid="uid://21bbu4ylx2wo" path="res://Scenes/unit.tscn" id="3_tqsk5"]
 
 [node name="Default" type="Node2D"]
 script = ExtResource("1_hj5t5")
 
-[node name="flow_field_manager" type="Node2D" parent="."]
+[node name="enemy_ffm" type="Node2D" parent="."]
+script = ExtResource("2_tqsk5")
+
+[node name="player_ffm" type="Node2D" parent="."]
 script = ExtResource("2_xe0gy")
 
 [node name="units" type="Node2D" parent="."]
