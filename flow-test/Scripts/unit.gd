@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 var grid: Array
 var speed: int = 100
+var control: String
 
 func _physics_process(_delta: float):
 	if(grid.is_empty() == false):

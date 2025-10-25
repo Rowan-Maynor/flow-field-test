@@ -6,7 +6,9 @@ const CELL_SIZE: int = 16
 var grid_width: int = floori(60) #this will be 60 when finalized for 16x16
 var grid_height: int = floori(33) #this will be 33 when finalized for 16x16
 
-var grids: Array = [] #this will store data using [x][y]
+#this will store the 4 pathing grids
+#[0]down, [1]right, [2]up, [3]left
+var grids: Array = [] 
 
 #Using this will properly propogate costs in a BFS
 const NEIGHBORS: Array = [
@@ -40,7 +42,6 @@ var cell_queue: Array = []
 func _ready():
 	for target in PATH_TARGETS:
 		grids.append(generate_new_grid(target))
-	print(grids)
 
 func get_target_grid_position(pos: Vector2):
 	var grid_pos: Vector2 = Vector2.ZERO
