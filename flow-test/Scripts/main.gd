@@ -1,16 +1,16 @@
 extends Node2D
 
-@onready var flow_field_manager: Node2D = $flow_field_manager
+@onready var player_ffm: Node2D = $player_ffm
 @onready var units: Node2D = $units
 
 const CELL_SIZE: int = 16 #matches to the size of one tile
 
 func _input(event: InputEvent) -> void:
 	if(event.is_action("right_click")):
-		var new_grid: Array = flow_field_manager.generate_new_grid(
+		var new_grid: Array = player_ffm.generate_new_grid(
 			get_target_grid_position(get_viewport().get_mouse_position())
 		)
-		flow_field_manager.grid = new_grid
+		player_ffm.grid = new_grid
 		for unit in units.get_children():
 			unit.grid = new_grid
 
