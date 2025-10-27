@@ -78,7 +78,7 @@ func generate_new_grid(new_target: Vector2):
 				"index": Vector2i(x, y),
 				"position": Vector2(x * CELL_SIZE, y * CELL_SIZE),
 				"visited": false,
-				"cost":  0.0,
+				"cost":  255.0,
 				"flow_vector": Vector2.ZERO
 			}
 			column.append(cell)
@@ -97,6 +97,11 @@ func is_diagonal(pos: Vector2):
 	return pos == Vector2(-1, -1) or pos == Vector2(1, -1) or pos == Vector2(1, 1) or pos == Vector2(-1, 1)
 
 func calculate_costs(new_grid: Array, new_target: Vector2):
+	#generate a collision shape for idle units
+	var space_state = get_world_2d().direct_space_state
+	var shape: RectangleShape2D = RectangleShape2D.new()
+	shape.size = Vector2(CELL_SIZE * 0.9, CELL_SIZE * 0.9)
+	
 	while(cell_queue.is_empty() == false):
 		var curr_cell: Vector2 = cell_queue.pop_front()
 		new_grid[curr_cell.x][curr_cell.y].visited = true
@@ -104,28 +109,30 @@ func calculate_costs(new_grid: Array, new_target: Vector2):
 			var next_x: int = int(curr_cell.x + neighbor.x)
 			var next_y: int = int(curr_cell.y + neighbor.y)
 			var next_vector: Vector2 = Vector2(next_x, next_y)
-			if(is_valid_cell(next_x, next_y) and not new_grid[next_x][next_y].visited):
+			if not is_valid_cell(next_x, next_y):
+				continue
+			if new_grid[next_x][next_y].visited:
+				continue
+			
+			var query: PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
+			query.shape = shape
+			
+			#needs to use bitwise parameter for layers, this represents 3
+			query.collision_mask = 0b00000000_00000000_00000000_00000100
+			query.collide_with_areas = true
+			query.collide_with_bodies = true
+			query.transform = Transform2D(0, new_grid[next_x][next_y].position + Vector2(
+				CELL_SIZE * 0.5, CELL_SIZE * 0.5))
+			
+			var results: Array = space_state.intersect_shape(query)
+			
+			if not results.is_empty():
+				new_grid[next_x][next_y].cost = 255
 				new_grid[next_x][next_y].visited = true
-				var cost_total = new_grid[curr_cell.x][curr_cell.y].cost + 1
-				
-				#generate a collision check for walls/units
-				var space_state = get_world_2d().direct_space_state
-				var shape: RectangleShape2D = RectangleShape2D.new()
-				shape.size = Vector2(8, 8)
-				
-				var query: PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
-				query.shape = shape
-				query.transform = Transform2D(0, new_grid[next_x][next_y].position + Vector2(8, 8))
-				query.collision_mask = 2
-				query.collide_with_areas = true
-				query.collide_with_bodies = true
-				
-				#check if units blocking (layer 2)
-				var results: Array = space_state.intersect_shape(query)
-				if not results.is_empty():
-					cost_total += 50
-					
-				new_grid[next_x][next_y].cost = cost_total
+				continue
+			else:
+				new_grid[next_x][next_y].cost = new_grid[curr_cell.x][curr_cell.y].cost + 1
+				new_grid[next_x][next_y].visited = true
 				cell_queue.append(next_vector)
 	
 	calculate_vectors(new_grid, new_target)

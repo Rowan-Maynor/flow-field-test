@@ -166,10 +166,10 @@ y_sort_enabled = true
 position = Vector2(602, 351)
 
 [node name="Unit2" parent="units" instance=ExtResource("10_olcgw")]
-position = Vector2(455, 264)
+position = Vector2(343, 362)
 
 [node name="Unit3" parent="units" instance=ExtResource("10_olcgw")]
-position = Vector2(511, 311)
+position = Vector2(498, 401)
 
 [node name="Unit4" parent="units" instance=ExtResource("10_olcgw")]
 position = Vector2(572, 229)
