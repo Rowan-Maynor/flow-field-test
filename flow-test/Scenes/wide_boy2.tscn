@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://jlckuxitu0k2"]
+
+[ext_resource type="Script" uid="uid://cfnmha0l7yqce" path="res://Scripts/unit.gd" id="1_0mnlf"]
+[ext_resource type="Texture2D" uid="uid://dytx80exegdxc" path="res://icon.svg" id="1_c528h"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ro6cu"]
+radius = 3.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8od7v"]
+radius = 5.0
+height = 50.0
+
+[node name="Test" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_0mnlf")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_c528h")
+
+[node name="unit_collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, 8)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_ro6cu")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="pathing_collision" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 8)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_8od7v")
+disabled = true
